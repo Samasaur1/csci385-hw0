@@ -7,6 +7,7 @@ class Triangle {
     }
 }
 
+let triangles = [];
 let triangle = new Triangle(0.0, 0.0, 1.0, 0.0);
 
 let canvas = document.getElementById('glcanvas');
@@ -123,6 +124,13 @@ function scaleFrame(percentage) {
     console.log("scaling!");
 }
 
+function spawn() {
+    triangles.push(triangle);
+    triangle = new Triangle((Math.random() * 2) - 1, (Math.random() * 2) - 1, 1.0, 0.0);
+    requestAnimationFrame(render);
+    console.log("spawning new triangle!");
+}
+
 function drawTriangle(shader, cx, cy, sz, ag) {
     const orientMtx = mat4.create();
     mat4.translate(orientMtx, orientMtx, [cx, cy, 0.0]);
@@ -134,6 +142,9 @@ function drawTriangle(shader, cx, cy, sz, ag) {
 }
 
 function drawSceneObjects() {
+    for (let t of triangles) {
+        drawTriangle(shader, t.centerx, t.centery, t.size, t.rotation);
+    }
     let t = triangle
     drawTriangle(shader, t.centerx, t.centery, t.size, t.rotation);
 }
